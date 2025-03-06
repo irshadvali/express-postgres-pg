@@ -18,7 +18,18 @@ app.get("/clients", async (req, res) => {
     const clients = await Client.findAll();
     res.json(clients);
 });
-
+app.get("/clients/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const client = await Client.findByPk(id);
+        if (!client) {
+            return res.status(404).json({ error: "Client not found" });
+        }
+        res.json(client);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch client" });
+    }
+});
 app.post("/clients", async (req, res) => {
     const { name, abberviation, oipdi_client_name } = req.body;
     try {
