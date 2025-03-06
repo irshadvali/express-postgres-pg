@@ -1,5 +1,8 @@
-import { Sequelize, DataTypes } from "sequelize";
+import dotenv from "dotenv";
+dotenv.config();
 
+import { Sequelize, DataTypes } from "sequelize";
+// import { sequelize, Client } from './models/client.js';
 // Database connection
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
@@ -18,7 +21,7 @@ const Client = sequelize.define("Client", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    abbreviation: {
+    abberviation: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -32,4 +35,4 @@ const Client = sequelize.define("Client", {
     timestamps: false
 });
 
-export { sequelize, Client };
+export {sequelize, Client}
