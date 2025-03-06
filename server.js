@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
-import {sequelize, Client} from './models/client.js'
+import {sequelize} from "./dbconnection/dbconnection.js"
+import {Client} from './models/client.js'
 
 
 const app = express();
