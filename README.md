@@ -19,6 +19,11 @@ podman run -d \
   -e POSTGRES_DB=mydatabase \
   -v pg_data:/var/lib/postgresql/data \
   docker.io/library/postgres:latest
+  
+or
+
+podman run -d --pod pg_pod --name postgres_db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin123 -e POSTGRES_DB=mydatabase -v pg_data:/var/lib/postgresql/data docker.io/library/postgres:latest
+
 
 ----------------------------------------
 POSTGRES_USER=admin: Username for PostgreSQL
@@ -41,6 +46,12 @@ podman run -d \
   -e PGADMIN_DEFAULT_PASSWORD=admin123 \
   -v pgadmin_data:/var/lib/pgadmin \
   docker.io/dpage/pgadmin4
+
+  or
+
+podman run -d --pod pg_pod --name pgadmin -e PGADMIN_DEFAULT_EMAIL=admin@example.com -e PGADMIN_DEFAULT_PASSWORD=admin123 -v pgadmin_data:/var/lib/pgadmin docker.io/dpage/pgadmin4
+
+
 
 ---------------------------
 
