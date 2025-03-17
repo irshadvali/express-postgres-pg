@@ -1,6 +1,8 @@
 # express-postgres-pg
 Step 1: Pull the PostgreSQL and pgAdmin Images
+
 podman pull docker.io/library/postgres:latest
+
 podman pull docker.io/dpage/pgadmin4:latest
 
 Step 2: Create a Pod (Optional)
