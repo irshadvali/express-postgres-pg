@@ -22,8 +22,11 @@ podman run -d \
 
 ----------------------------------------
 POSTGRES_USER=admin: Username for PostgreSQL
+
 POSTGRES_PASSWORD=admin123: Password
+
 POSTGRES_DB=mydatabase: Default database
+
 -v pg_data:/var/lib/postgresql/data: Persistent storage
 
 ------------------------------------------------
@@ -42,19 +45,28 @@ podman run -d \
 ---------------------------
 
 PGADMIN_DEFAULT_EMAIL=admin@example.com
+
 PGADMIN_DEFAULT_PASSWORD=admin123
 ----------------------------
 
 Step 5: Access pgAdmin
 
 Open http://localhost:8080 in your browser.
+
 Login with:
+
 Email: admin@example.com
+
 Password: admin123
+
 Add a new server:
+
 Host: localhost
+
 Port: 5432
+
 User: admin
+
 Password: admin123
 
 
