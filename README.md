@@ -96,5 +96,27 @@ Step 7: Persistent Storage (Optional)
 podman volume create pg_data
 podman volume create pgadmin_data
 
+--------------------------------------------
+
+*Stop the pod and all its containers*
+
+podman pod stop pg_pod
+
+
+*Start the pod and all its containers*
+
+podman pod start pg_pod
+
+*Stop a specific container*
+
+podman stop pgadmin
+
+podman stop postgres_db
+
+*Start a specific container*
+
+podman start pgadmin
+podman start postgres_db
+
 
 
