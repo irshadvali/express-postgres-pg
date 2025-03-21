@@ -47,8 +47,25 @@ app.post("/clients", async (req, res) => {
     }
 });
 app.get('/program-measures', async (req, res) => {
-    const measures = await ProgramMeasure.findAll();
-    res.json(measures);
+    try {
+        const measures = await ProgramMeasure.findAll();
+    
+        if (measures.length === 0) {
+          return res.json({ header: [], data: [] });
+        }
+    
+        // Extract column names and keep data as objects
+        const header = Object.keys(measures[0].toJSON());
+        const data = measures.map(measure => measure.toJSON());
+    
+        res.json({ header, data });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+  
+    
 });
 
 app.get('/program-schedule-types', async (req, res) => {
@@ -56,11 +73,26 @@ app.get('/program-schedule-types', async (req, res) => {
     res.json(scheduleTypes);
 });
 
-app.get('/program-statuses', async (req, res) => {
-    const statuses = await ProgramStatus.findAll();
-    res.json(statuses);
-});
 
+app.get('/program-statuses', async (req, res) => {
+    try {
+      const statuses = await ProgramStatus.findAll();
+  
+      if (statuses.length === 0) {
+        return res.json({ header: [], data: [] });
+      }
+  
+      // Extract column names and keep data as objects
+      const header = Object.keys(statuses[0].toJSON());
+      const data = statuses.map(status => status.toJSON());
+  
+      res.json({ header, data });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
 app.get('/program-subtypes', async (req, res) => {
     const subtypes = await ProgramSubtype.findAll();
     res.json(subtypes);
