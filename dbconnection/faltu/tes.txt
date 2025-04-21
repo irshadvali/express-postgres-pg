@@ -1,0 +1,81 @@
+.env fiel
+
+DB_HOST=your-azure-db.postgres.database.azure.com
+DB_PORT=5432
+DB_USER=username@your-azure-db
+DB_PASSWORD=your-password
+DB_NAME=your-database
+
+
+=========================
+
+dbconnection.js
+
+
+
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const sequelize = new Sequelize(
+  process.env.DB_NAME!,
+  process.env.DB_USER!,
+  process.env.DB_PASSWORD!,
+  {
+    host: process.env.DB_HOST,
+    dialect: 'postgres',
+    port: Number(process.env.DB_PORT),
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  }
+);
+
+export default sequelize;
+
+
+
+============================
+
+workflow yml fiel
+
+
+
+# .github/workflows/deploy.yml
+name: Deploy Node.js app to Azure Web App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build project
+      run: npm run build
+
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: <your-app-service-name>
+        slot-name: production
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: .
+
+
+=====================
