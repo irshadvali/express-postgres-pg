@@ -29,96 +29,96 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 // CLIENT ROUTES
-app.get("/clients", async (req, res) => {
+app.get("/api/clients", async (req, res) => {
   const clients = await Client.findAll();
   res.json(clients);
 });
 
-app.get("/clients/:id", async (req, res) => {
+app.get("/api/clients/:id", async (req, res) => {
   const client = await Client.findByPk(req.params.id);
   if (!client) return res.status(404).json({ error: "Client not found" });
   res.json(client);
 });
 
 // PROGRAM ATTRIBUTE ROUTES
-app.get("/program-attributes", async (req, res) => {
+app.get("/api/program-attributes", async (req, res) => {
   const items = await ProgramAttribute.findAll();
   res.json(items);
 });
 
-app.get("/program-attributes/:id", async (req, res) => {
+app.get("/api/program-attributes/:id", async (req, res) => {
   const item = await ProgramAttribute.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramAttribute not found" });
   res.json(item);
 });
 
 // PROGRAM SCHEDULE TYPE ROUTES
-app.get("/program-schedule-types", async (req, res) => {
+app.get("/api/program-schedule-types", async (req, res) => {
   const items = await ProgramScheduleType.findAll();
   res.json(items);
 });
 
-app.get("/program-schedule-types/:id", async (req, res) => {
+app.get("/api/program-schedule-types/:id", async (req, res) => {
   const item = await ProgramScheduleType.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramScheduleType not found" });
   res.json(item);
 });
 
 // PROGRAM LANGUAGE ROUTES
-app.get("/program-languages", async (req, res) => {
+app.get("/api/program-languages", async (req, res) => {
   const items = await ProgramLanguage.findAll();
   res.json(items);
 });
 
-app.get("/program-languages/:id", async (req, res) => {
+app.get("/api/program-languages/:id", async (req, res) => {
   const item = await ProgramLanguage.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramLanguage not found" });
   res.json(item);
 });
 
 // PROGRAM CHANNEL ROUTES
-app.get("/program-channels", async (req, res) => {
+app.get("/api/program-channels", async (req, res) => {
   const items = await ProgramChannel.findAll();
   res.json(items);
 });
 
-app.get("/program-channels/:id", async (req, res) => {
+app.get("/api/program-channels/:id", async (req, res) => {
   const item = await ProgramChannel.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramChannel not found" });
   res.json(item);
 });
 
 // PROGRAM MEASURE ROUTES
-app.get("/program-measures", async (req, res) => {
+app.get("/api/program-measures", async (req, res) => {
   const items = await ProgramMeasure.findAll();
   res.json(items);
 });
 
-app.get("/program-measures/:id", async (req, res) => {
+app.get("/api/program-measures/:id", async (req, res) => {
   const item = await ProgramMeasure.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramMeasure not found" });
   res.json(item);
 });
 
 // PROGRAM TIMEFRAME ROUTES
-app.get("/program-timeframes", async (req, res) => {
+app.get("/api/program-timeframes", async (req, res) => {
   const items = await ProgramTimeframe.findAll();
   res.json(items);
 });
 
-app.get("/program-timeframes/:id", async (req, res) => {
+app.get("/api/program-timeframes/:id", async (req, res) => {
   const item = await ProgramTimeframe.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramTimeframe not found" });
   res.json(item);
 });
 
 // PROGRAM WEEK ROUTES
-app.get("/program-weeks", async (req, res) => {
+app.get("/api/program-weeks", async (req, res) => {
   const items = await ProgramWeek.findAll();
   res.json(items);
 });
 
-app.get("/program-weeks/:id", async (req, res) => {
+app.get("/api/program-weeks/:id", async (req, res) => {
   const item = await ProgramWeek.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramWeek not found" });
   res.json(item);

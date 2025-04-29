@@ -31,7 +31,7 @@ describe('Client API Endpoints', () => {
       { id: '2', name: 'Client B', abberviation: 'CB', oipdi_client_name: 'OIPDI B' }
     ];
     Client.findAll.mockResolvedValue(mockClients);
-    const res = await request(app).get('/clients');
+    const res = await request(app).get('/api/clients');
     expect(res.status).toBe(200);
     expect(res.body).toEqual(mockClients);
   });
@@ -39,14 +39,14 @@ describe('Client API Endpoints', () => {
   test('GET /clients/:id should return a client by ID', async () => {
     const mockClient = { id: '1', name: 'Client A', abberviation: 'CA', oipdi_client_name: 'OIPDI A' };
     Client.findByPk.mockResolvedValue(mockClient);
-    const res = await request(app).get('/clients/1');
+    const res = await request(app).get('/api/clients/1');
     expect(res.status).toBe(200);
     expect(res.body).toEqual(mockClient);
   });
 
   test('GET /clients/:id should return 404 if not found', async () => {
     Client.findByPk.mockResolvedValue(null);
-    const res = await request(app).get('/clients/999');
+    const res = await request(app).get('/api/clients/999');
     expect(res.status).toBe(404);
     expect(res.body).toEqual({ error: "Client not found" });
   });
@@ -101,21 +101,21 @@ modelTests.forEach(({ name, path, model, mockItem }) => {
   describe(`${name} API Endpoints`, () => {
     test(`GET /${path} should return all`, async () => {
       model.findAll.mockResolvedValue([mockItem]);
-      const res = await request(app).get(`/${path}`);
+      const res = await request(app).get(`/api/${path}`);
       expect(res.status).toBe(200);
       expect(res.body).toEqual([mockItem]);
     });
 
     test(`GET /${path}/:id should return item by ID`, async () => {
       model.findByPk.mockResolvedValue(mockItem);
-      const res = await request(app).get(`/${path}/1`);
+      const res = await request(app).get(`/api/${path}/1`);
       expect(res.status).toBe(200);
       expect(res.body).toEqual(mockItem);
     });
 
     test(`GET /${path}/:id should return 404 if not found`, async () => {
       model.findByPk.mockResolvedValue(null);
-      const res = await request(app).get(`/${path}/999`);
+      const res = await request(app).get(`/api/${path}/999`);
       expect(res.status).toBe(404);
       expect(res.body).toEqual({ error: `${name} not found` });
     });
