@@ -10,7 +10,8 @@ import { ProgramChannel } from '../models/programChannel.js';
 import { ProgramMeasure } from '../models/programMeasure.js';
 import { ProgramTimeframe } from '../models/programTimeframe.js';
 import { ProgramWeek } from '../models/programWeek.js';
-
+import { ProgramStatus } from '../models/programStatus.js';
+jest.mock('../models/programStatus.js');
 jest.mock('../models/client.js');
 jest.mock('../models/programAttribute.js');
 jest.mock('../models/programScheduleType.js');
@@ -219,4 +220,30 @@ describe('ProgramWeek API Endpoints', () => {
     expect(res.status).toBe(404);
     expect(res.body).toEqual({ error: 'ProgramWeek not found' });
   });
+
+
+  // PROGRAM STATUS
+describe('ProgramStatus API Endpoints', () => {
+  test('GET /api/program-statuses should return all', async () => {
+    ProgramStatus.findAll.mockResolvedValue([{ id: '1', status: 'Active' }]);
+    const res = await request(app).get('/api/program-statuses');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([{ id: '1', status: 'Active' }]);
+  });
+
+  test('GET /api/program-statuses/:id should return item by ID', async () => {
+    ProgramStatus.findByPk.mockResolvedValue({ id: '1', status: 'Active' });
+    const res = await request(app).get('/api/program-statuses/1');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ id: '1', status: 'Active' });
+  });
+
+  test('GET /api/program-statuses/:id should return 404 if not found', async () => {
+    ProgramStatus.findByPk.mockResolvedValue(null);
+    const res = await request(app).get('/api/program-statuses/999');
+    expect(res.status).toBe(404);
+    expect(res.body).toEqual({ error: 'ProgramStatus not found' });
+  });
+});
+
 });

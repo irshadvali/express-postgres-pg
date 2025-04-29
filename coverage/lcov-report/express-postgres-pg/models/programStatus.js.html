@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for express-postgres-pg/models/programMeasure.js</title>
+    <title>Code coverage report for express-postgres-pg/models/programStatus.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">express-postgres-pg/models</a> programMeasure.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">express-postgres-pg/models</a> programStatus.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -82,8 +82,10 @@
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -101,26 +103,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Sequelize, DataTypes } from "sequelize";
 import { sequelize } from "../dbconnection/dbconnection.js";
-&nbsp;
-const ProgramMeasure = sequelize.define("ProgramMeasure", {
+const ProgramStatus = sequelize.define("ProgramStatus", {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true
     },
-    measure_name: {
+    status: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    is_default: {
+        type: DataTypes.BOOLEAN
     }
 }, {
-    tableName: "program_measure",
+    tableName: "program_status",
     schema: "reference",
     timestamps: false
 });
 &nbsp;
-export { ProgramMeasure };</pre></td></tr></table></pre>
+export { ProgramStatus };
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

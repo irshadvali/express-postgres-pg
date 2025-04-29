@@ -11,7 +11,7 @@ import { ProgramChannel } from "./models/programChannel.js";
 import { ProgramMeasure } from "./models/programMeasure.js";
 import { ProgramTimeframe } from "./models/programTimeframe.js";
 import { ProgramWeek } from "./models/programWeek.js";
-
+import { ProgramStatus } from "./models/programStatus.js";
 const app = express();
 app.use(express.json());
 
@@ -121,6 +121,18 @@ app.get("/api/program-weeks", async (req, res) => {
 app.get("/api/program-weeks/:id", async (req, res) => {
   const item = await ProgramWeek.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramWeek not found" });
+  res.json(item);
+});
+
+// Add to the bottom of server.js
+app.get("/api/program-statuses", async (req, res) => {
+  const items = await ProgramStatus.findAll();
+  res.json(items);
+});
+
+app.get("/api/program-statuses/:id", async (req, res) => {
+  const item = await ProgramStatus.findByPk(req.params.id);
+  if (!item) return res.status(404).json({ error: "ProgramStatus not found" });
   res.json(item);
 });
 
