@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745921145412" clover="3.2.0">
-  <project timestamp="1745921145413" name="All files">
+<coverage generated="1745999330131" clover="3.2.0">
+  <project timestamp="1745999330131" name="All files">
     <metrics statements="84" coveredstatements="78" conditionals="22" coveredconditionals="19" methods="22" coveredmethods="18" elements="128" coveredelements="115" complexity="0" loc="84" ncloc="84" packages="3" files="11" classes="11"/>
     <package name="express-postgres-pg">
       <metrics statements="73" coveredstatements="67" conditionals="22" coveredconditionals="19" methods="22" coveredmethods="18"/>
