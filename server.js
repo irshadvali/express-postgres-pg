@@ -124,6 +124,44 @@ app.get("/api/program-languages/:id", async (req, res) => {
   res.json(item);
 });
 
+app.post("/api/program-languages", async (req, res) => {
+  try {
+    const item = await ProgramLanguage.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.put("/api/program-languages/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramLanguage.update(req.body, {
+      where: { id: req.params.id }
+    });
+
+    if (!updated) {
+      return res.status(404).json({ error: "ProgramLanguage not found" });
+    }
+
+    res.json({ message: "ProgramLanguage updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.delete("/api/program-languages/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramLanguage.destroy({
+      where: { id: req.params.id }
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ error: "ProgramLanguage not found" });
+    }
+
+    res.json({ message: "ProgramLanguage deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 // PROGRAM CHANNEL ROUTES
 app.get("/api/program-channels", async (req, res) => {
   const items = await ProgramChannel.findAll();
