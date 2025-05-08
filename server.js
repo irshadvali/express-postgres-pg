@@ -12,6 +12,7 @@ import { ProgramMeasure } from "./models/programMeasure.js";
 import { ProgramTimeframe } from "./models/programTimeframe.js";
 import { ProgramWeek } from "./models/programWeek.js";
 import { ProgramStatus } from "./models/programStatus.js";
+import {TableRef} from "./models/tableRef.js"
 const app = express();
 app.use(express.json());
 
@@ -27,7 +28,54 @@ if (process.env.NODE_ENV !== "test") {
     })
     .catch(err => console.error("Database connection failed:", err));
 }
+// TableRef ROUTES
+app.get("/api/table_ref", async (req, res) => {
+  const tableref = await TableRef.findAll();
+  res.json(tableref);
+});
+// Create TableRef
+app.post("/api/table_ref", async (req, res) => {
+  try {
+    const newItem = await TableRef.create(req.body);
+    res.status(201).json(newItem);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
+// Update TableRef
+app.put("/api/table_ref/:id", async (req, res) => {
+  try {
+    const [updated] = await TableRef.update(req.body, {
+      where: { table_id: req.params.id }
+    });
+
+    if (!updated) {
+      return res.status(404).json({ error: "TableRef not found" });
+    }
+
+    res.json({ message: "TableRef updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete TableRef
+app.delete("/api/table_ref/:id", async (req, res) => {
+  try {
+    const deleted = await TableRef.destroy({
+      where: { table_id: req.params.id }
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ error: "TableRef not found" });
+    }
+
+    res.json({ message: "TableRef deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 // CLIENT ROUTES
 app.get("/api/clients", async (req, res) => {
   const clients = await Client.findAll();
@@ -136,4 +184,18 @@ app.get("/api/program-statuses/:id", async (req, res) => {
   res.json(item);
 });
 
+// Mapped Data ROUTE
+app.get("/api/mapped-data", async (req, res) => {
+  const [tableRefs, programLanguages, programChannels] = await Promise.all([
+    TableRef.findAll(),
+    ProgramLanguage.findAll({ include: TableRef }),
+    ProgramChannel.findAll({ include: TableRef })
+  ]);
+
+  res.json({
+    tableRefs,
+    programLanguages,
+    programChannels
+  });
+});
 export default app;
