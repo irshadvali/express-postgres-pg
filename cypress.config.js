@@ -7,4 +7,7 @@ export default defineConfig({
       // implement node event listeners here if needed
     },
   },
+  screenshotsFolder: 'cypress/screenshots',
+  video: true,
+  videosFolder: "cypress/videos"
 });
