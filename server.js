@@ -174,6 +174,47 @@ app.get("/api/program-channels/:id", async (req, res) => {
   res.json(item);
 });
 
+app.post("/api/program-channels", async (req, res) => {
+  try {
+    const item = await ProgramChannel.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/api/program-channels/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramChannel.update(req.body, {
+      where: { id: req.params.id }
+    });
+
+    if (!updated) {
+      return res.status(404).json({ error: "ProgramChannel not found" });
+    }
+
+    res.json({ message: "ProgramChannel updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/program-channels/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramChannel.destroy({
+      where: { id: req.params.id }
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ error: "ProgramChannel not found" });
+    }
+
+    res.json({ message: "ProgramChannel deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // PROGRAM MEASURE ROUTES
 app.get("/api/program-measures", async (req, res) => {
   const items = await ProgramMeasure.findAll();
