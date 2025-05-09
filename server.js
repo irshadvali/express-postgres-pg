@@ -100,6 +100,37 @@ app.get("/api/program-attributes/:id", async (req, res) => {
   res.json(item);
 });
 
+app.post("/api/program-attributes", async (req, res) => {
+  try {
+    const item = await ProgramAttribute.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/api/program-attributes/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramAttribute.update(req.body, {
+      where: { id: req.params.id }
+    });
+    if (!updated) return res.status(404).json({ error: "ProgramAttribute not found" });
+    res.json({ message: "ProgramAttribute updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/program-attributes/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramAttribute.destroy({ where: { id: req.params.id } });
+    if (!deleted) return res.status(404).json({ error: "ProgramAttribute not found" });
+    res.json({ message: "ProgramAttribute deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // PROGRAM SCHEDULE TYPE ROUTES
 app.get("/api/program-schedule-types", async (req, res) => {
   const items = await ProgramScheduleType.findAll();
@@ -237,6 +268,37 @@ app.get("/api/program-timeframes/:id", async (req, res) => {
   const item = await ProgramTimeframe.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramTimeframe not found" });
   res.json(item);
+});
+
+app.post("/api/program-measures", async (req, res) => {
+  try {
+    const item = await ProgramMeasure.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/api/program-measures/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramMeasure.update(req.body, {
+      where: { id: req.params.id }
+    });
+    if (!updated) return res.status(404).json({ error: "ProgramMeasure not found" });
+    res.json({ message: "ProgramMeasure updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/program-measures/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramMeasure.destroy({ where: { id: req.params.id } });
+    if (!deleted) return res.status(404).json({ error: "ProgramMeasure not found" });
+    res.json({ message: "ProgramMeasure deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // PROGRAM WEEK ROUTES
