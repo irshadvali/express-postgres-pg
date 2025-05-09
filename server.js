@@ -12,6 +12,7 @@ import { ProgramMeasure } from "./models/programMeasure.js";
 import { ProgramTimeframe } from "./models/programTimeframe.js";
 import { ProgramWeek } from "./models/programWeek.js";
 import { ProgramStatus } from "./models/programStatus.js";
+import {TableRef} from "./models/tableRef.js"
 const app = express();
 app.use(express.json());
 
@@ -27,7 +28,54 @@ if (process.env.NODE_ENV !== "test") {
     })
     .catch(err => console.error("Database connection failed:", err));
 }
+// TableRef ROUTES
+app.get("/api/table_ref", async (req, res) => {
+  const tableref = await TableRef.findAll();
+  res.json(tableref);
+});
+// Create TableRef
+app.post("/api/table_ref", async (req, res) => {
+  try {
+    const newItem = await TableRef.create(req.body);
+    res.status(201).json(newItem);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
+// Update TableRef
+app.put("/api/table_ref/:id", async (req, res) => {
+  try {
+    const [updated] = await TableRef.update(req.body, {
+      where: { table_id: req.params.id }
+    });
+
+    if (!updated) {
+      return res.status(404).json({ error: "TableRef not found" });
+    }
+
+    res.json({ message: "TableRef updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete TableRef
+app.delete("/api/table_ref/:id", async (req, res) => {
+  try {
+    const deleted = await TableRef.destroy({
+      where: { table_id: req.params.id }
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ error: "TableRef not found" });
+    }
+
+    res.json({ message: "TableRef deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 // CLIENT ROUTES
 app.get("/api/clients", async (req, res) => {
   const clients = await Client.findAll();
@@ -50,6 +98,37 @@ app.get("/api/program-attributes/:id", async (req, res) => {
   const item = await ProgramAttribute.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramAttribute not found" });
   res.json(item);
+});
+
+app.post("/api/program-attributes", async (req, res) => {
+  try {
+    const item = await ProgramAttribute.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/api/program-attributes/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramAttribute.update(req.body, {
+      where: { id: req.params.id }
+    });
+    if (!updated) return res.status(404).json({ error: "ProgramAttribute not found" });
+    res.json({ message: "ProgramAttribute updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/program-attributes/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramAttribute.destroy({ where: { id: req.params.id } });
+    if (!deleted) return res.status(404).json({ error: "ProgramAttribute not found" });
+    res.json({ message: "ProgramAttribute deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // PROGRAM SCHEDULE TYPE ROUTES
@@ -76,6 +155,44 @@ app.get("/api/program-languages/:id", async (req, res) => {
   res.json(item);
 });
 
+app.post("/api/program-languages", async (req, res) => {
+  try {
+    const item = await ProgramLanguage.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.put("/api/program-languages/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramLanguage.update(req.body, {
+      where: { id: req.params.id }
+    });
+
+    if (!updated) {
+      return res.status(404).json({ error: "ProgramLanguage not found" });
+    }
+
+    res.json({ message: "ProgramLanguage updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.delete("/api/program-languages/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramLanguage.destroy({
+      where: { id: req.params.id }
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ error: "ProgramLanguage not found" });
+    }
+
+    res.json({ message: "ProgramLanguage deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 // PROGRAM CHANNEL ROUTES
 app.get("/api/program-channels", async (req, res) => {
   const items = await ProgramChannel.findAll();
@@ -86,6 +203,47 @@ app.get("/api/program-channels/:id", async (req, res) => {
   const item = await ProgramChannel.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramChannel not found" });
   res.json(item);
+});
+
+app.post("/api/program-channels", async (req, res) => {
+  try {
+    const item = await ProgramChannel.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/api/program-channels/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramChannel.update(req.body, {
+      where: { id: req.params.id }
+    });
+
+    if (!updated) {
+      return res.status(404).json({ error: "ProgramChannel not found" });
+    }
+
+    res.json({ message: "ProgramChannel updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/program-channels/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramChannel.destroy({
+      where: { id: req.params.id }
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ error: "ProgramChannel not found" });
+    }
+
+    res.json({ message: "ProgramChannel deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // PROGRAM MEASURE ROUTES
@@ -112,6 +270,37 @@ app.get("/api/program-timeframes/:id", async (req, res) => {
   res.json(item);
 });
 
+app.post("/api/program-measures", async (req, res) => {
+  try {
+    const item = await ProgramMeasure.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/api/program-measures/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramMeasure.update(req.body, {
+      where: { id: req.params.id }
+    });
+    if (!updated) return res.status(404).json({ error: "ProgramMeasure not found" });
+    res.json({ message: "ProgramMeasure updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/program-measures/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramMeasure.destroy({ where: { id: req.params.id } });
+    if (!deleted) return res.status(404).json({ error: "ProgramMeasure not found" });
+    res.json({ message: "ProgramMeasure deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // PROGRAM WEEK ROUTES
 app.get("/api/program-weeks", async (req, res) => {
   const items = await ProgramWeek.findAll();
@@ -136,4 +325,18 @@ app.get("/api/program-statuses/:id", async (req, res) => {
   res.json(item);
 });
 
+// Mapped Data ROUTE
+app.get("/api/mapped-data", async (req, res) => {
+  const [tableRefs, programLanguages, programChannels] = await Promise.all([
+    TableRef.findAll(),
+    ProgramLanguage.findAll({ include: TableRef }),
+    ProgramChannel.findAll({ include: TableRef })
+  ]);
+
+  res.json({
+    tableRefs,
+    programLanguages,
+    programChannels
+  });
+});
 export default app;

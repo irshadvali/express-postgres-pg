@@ -1,49 +1,67 @@
-// import dotenv from "dotenv";
-// dotenv.config();
-// import express from "express";
-// import { Sequelize, DataTypes } from "sequelize";
 
-// // Database connection
-// const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-//     host: process.env.DB_HOST,
-//     dialect: "postgres",
-//     port: process.env.DB_PORT
-// });
+import dotenv from "dotenv";
+dotenv.config();
 
-// // Define User model
-// const User = sequelize.define("User", {
-//     id: {
-//         type: DataTypes.INTEGER,
-//         autoIncrement: true,
-//         primaryKey: true
-//     },
-//     name: {
-//         type: DataTypes.STRING,
-//         allowNull: false
-//     },
-//     email: {
-//         type: DataTypes.STRING,
-//         allowNull: false,
-//         unique: true
-//     }
-// });
+import { sequelize } from "./dbconnection/dbconnection.js";
 
-// const app = express();
-// app.use(express.json());
 
-// // Sync Database
-// sequelize.sync()
-//     .then(() => console.log("Database connected!"))
-//     .catch(err => console.error("Database connection failed:", err));
+import { ProgramLanguage } from "./models/programLanguage.js";
+import { ProgramChannel } from "./models/programChannel.js";
 
-// // Routes
-// app.get("/users", async (req, res) => {
-//     const users = await User.findAll();
-//     res.json(users);
-// });
+import {TableRef} from "./models/tableRef.js"
+const app = express();
+app.use(express.json());
 
-// app.post("/users", async (req, res) => {
-//     const { name, email } = req.body;
+if (process.env.NODE_ENV !== "test") {
+  sequelize.authenticate()
+    .then(() => {
+      console.log("Database connected!");
+      return sequelize.sync();
+    })
+    .then(() => {
+      const PORT = process.env.PORT || 3000;
+      app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    })
+    .catch(err => console.error("Database connection failed:", err));
+}
+// TableRef ROUTES
+app.get("/api/table_ref", async (req, res) => {
+  const tableref = await TableRef.findAll();
+  res.json(tableref);
+});
+
+
+
+
+// PROGRAM LANGUAGE ROUTES
+app.get("/api/program-languages", async (req, res) => {
+  const items = await ProgramLanguage.findAll();
+  res.json(items);
+});
+
+app.get("/api/program-languages/:id", async (req, res) => {
+  const item = await ProgramLanguage.findByPk(req.params.id);
+  if (!item) return res.status(404).json({ error: "ProgramLanguage not found" });
+  res.json(item);
+});
+
+// PROGRAM CHANNEL ROUTES
+app.get("/api/program-channels", async (req, res) => {
+  const items = await ProgramChannel.findAll();
+  res.json(items);
+});
+
+app.get("/api/program-channels/:id", async (req, res) => {
+  const item = await ProgramChannel.findByPk(req.params.id);
+  if (!item) return res.status(404).json({ error: "ProgramChannel not found" });
+  res.json(item);
+});
+
+
+
+
+export default app;
+
 //     const user = await User.create({ name, email });
 //     res.status(201).json(user);
 // });
