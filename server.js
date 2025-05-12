@@ -270,6 +270,87 @@ app.get("/api/program-timeframes/:id", async (req, res) => {
   res.json(item);
 });
 
+app.post("/api/program-timeframes", async (req, res) => {
+  try {
+    const item = await ProgramTimeframe.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/api/program-timeframes/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramTimeframe.update(req.body, { where: { id: req.params.id } });
+    if (!updated) return res.status(404).json({ error: "ProgramTimeframe not found" });
+    res.json({ message: "ProgramTimeframe updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/program-timeframes/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramTimeframe.destroy({ where: { id: req.params.id } });
+    if (!deleted) return res.status(404).json({ error: "ProgramTimeframe not found" });
+    res.json({ message: "ProgramTimeframe deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+// Time zone
+
+app.get("/api/program-timezones", async (req, res) => {
+  try {
+    const items = await ProgramTimezone.findAll();
+    res.json(items);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/program-timezones/:id", async (req, res) => {
+  try {
+    const item = await ProgramTimezone.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ error: "ProgramTimezone not found" });
+    res.json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/api/program-timezones", async (req, res) => {
+  try {
+    const item = await ProgramTimezone.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/api/program-timezones/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramTimezone.update(req.body, { where: { id: req.params.id } });
+    if (!updated) return res.status(404).json({ error: "ProgramTimezone not found" });
+    res.json({ message: "ProgramTimezone updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/program-timezones/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramTimezone.destroy({ where: { id: req.params.id } });
+    if (!deleted) return res.status(404).json({ error: "ProgramTimezone not found" });
+    res.json({ message: "ProgramTimezone deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+///////
+
+
 app.post("/api/program-measures", async (req, res) => {
   try {
     const item = await ProgramMeasure.create(req.body);
@@ -311,6 +392,36 @@ app.get("/api/program-weeks/:id", async (req, res) => {
   const item = await ProgramWeek.findByPk(req.params.id);
   if (!item) return res.status(404).json({ error: "ProgramWeek not found" });
   res.json(item);
+});
+
+
+app.post("/api/program-weeks", async (req, res) => {
+  try {
+    const item = await ProgramWeek.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/api/program-weeks/:id", async (req, res) => {
+  try {
+    const [updated] = await ProgramWeek.update(req.body, { where: { id: req.params.id } });
+    if (!updated) return res.status(404).json({ error: "ProgramWeek not found" });
+    res.json({ message: "ProgramWeek updated" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/program-weeks/:id", async (req, res) => {
+  try {
+    const deleted = await ProgramWeek.destroy({ where: { id: req.params.id } });
+    if (!deleted) return res.status(404).json({ error: "ProgramWeek not found" });
+    res.json({ message: "ProgramWeek deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Add to the bottom of server.js
