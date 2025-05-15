@@ -13,6 +13,8 @@ import { ProgramTimeframe } from "./models/programTimeframe.js";
 import { ProgramWeek } from "./models/programWeek.js";
 import { ProgramStatus } from "./models/programStatus.js";
 import {TableRef} from "./models/tableRef.js"
+import { ProgramType } from "./models/programType.js";
+import { ProgramSubtype } from "./models/programSubtype.js";
 const app = express();
 app.use(express.json());
 
@@ -450,4 +452,57 @@ app.get("/api/mapped-data", async (req, res) => {
     programChannels
   });
 });
+
+
+// Type Api
+
+app.get("/api/program-types", async (req, res) => {
+  try {
+    const types = await ProgramType.findAll();
+    res.json(types);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/program-types/:id", async (req, res) => {
+  try {
+    const type = await ProgramType.findByPk(req.params.id);
+    if (!type) return res.status(404).json({ error: "ProgramType not found" });
+    res.json(type);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Subtype 
+
+// Define association if not already
+ProgramSubtype.belongsTo(ProgramType, { foreignKey: "program_type_id" });
+
+app.get("/api/program-subtypes", async (req, res) => {
+  try {
+    const subtypes = await ProgramSubtype.findAll({
+      include: {
+        model: ProgramType,
+        attributes: ["programtype"]
+      },
+      raw: true,
+      nest: true
+    });
+
+    // Flatten the output
+    const flattened = subtypes.map(item => ({
+      id: item.id,
+      program_sub_type: item.program_sub_type,
+      program_type_id: item.program_type_id,
+      programtype: item.ProgramType?.programtype || null
+    }));
+
+    res.json(flattened);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default app;
