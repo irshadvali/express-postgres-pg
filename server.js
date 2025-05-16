@@ -15,6 +15,7 @@ import { ProgramStatus } from "./models/programStatus.js";
 import {TableRef} from "./models/tableRef.js"
 import { ProgramType } from "./models/programType.js";
 import { ProgramSubtype } from "./models/programSubtype.js";
+import { ProgramTimezone } from "./models/programTimezone.js"
 const app = express();
 app.use(express.json());
 
@@ -504,5 +505,77 @@ app.get("/api/program-subtypes", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// GET ALL DATA in single response
+
+app.get("/api/all-data", async (req, res) => {
+  try {
+    const tableRefs = await TableRef.findAll({ raw: true });
+
+    // Setup model mapping by table name
+    const tableModelMap = {
+      "Program Language": ProgramLanguage,
+      "Program Channel": ProgramChannel,
+      "Program Attributes": ProgramAttribute,
+      "Program Measure": ProgramMeasure,
+      "Program Timezone": ProgramTimezone,
+      "Program Week": ProgramWeek,
+      "Program Timeframe": ProgramTimeframe,
+      "Program Status": ProgramStatus,
+      "Program Schedule Type": ProgramScheduleType,
+      "Program Types": ProgramType,
+      "Program Subtypes": ProgramSubtype ,// will handle flattening below
+      "Program Timeframes": ProgramTimeframe
+    };
+
+    // Fetch all model data in parallel
+    const dataMap = {};
+
+    // Fetch and flatten ProgramSubtypes manually to include ProgramType name
+    const [programTypes, programSubtypesRaw] = await Promise.all([
+      ProgramType.findAll({ raw: true }),
+      ProgramSubtype.findAll({
+        include: {
+          model: ProgramType,
+          attributes: ["programtype"]
+        },
+        raw: true,
+        nest: true
+      })
+    ]);
+
+    const flattenedSubtypes = programSubtypesRaw.map(sub => ({
+      id: sub.id,
+      program_sub_type: sub.program_sub_type,
+      program_type_id: sub.program_type_id,
+      programtype: sub.ProgramType?.programtype || null
+    }));
+
+    // Load all other models
+    await Promise.all(
+      Object.entries(tableModelMap).map(async ([tableName, model]) => {
+        if (tableName === "Program Subtypes") {
+          dataMap[tableName] = flattenedSubtypes;
+        } else {
+          dataMap[tableName] = await model.findAll({ raw: true });
+        }
+      })
+    );
+
+    // Build final response
+    const response = {
+      tableRefs: tableRefs.map(ref => ({
+        ...ref,
+        data: dataMap[ref.table_name] || []
+      }))
+    };
+
+    res.json(response);
+
+  } catch (err) {
+    console.error("Error in /api/all-data:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 export default app;
