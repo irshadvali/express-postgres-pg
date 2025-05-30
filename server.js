@@ -511,7 +511,6 @@ app.get("/api/all-data", async (req, res) => {
   try {
     const tableRefs = await TableRef.findAll({ raw: true });
 
-    // Setup model mapping by table name
     const tableModelMap = {
       "Program Language": ProgramLanguage,
       "Program Channel": ProgramChannel,
@@ -523,14 +522,9 @@ app.get("/api/all-data", async (req, res) => {
       "Program Status": ProgramStatus,
       "Program Schedule Type": ProgramScheduleType,
       "Program Types": ProgramType,
-      "Program Subtypes": ProgramSubtype ,// will handle flattening below
-      "Program Timeframes": ProgramTimeframe
+      "Program Subtypes": ProgramSubtype
     };
 
-    // Fetch all model data in parallel
-    const dataMap = {};
-
-    // Fetch and flatten ProgramSubtypes manually to include ProgramType name
     const [programTypes, programSubtypesRaw] = await Promise.all([
       ProgramType.findAll({ raw: true }),
       ProgramSubtype.findAll({
@@ -550,7 +544,8 @@ app.get("/api/all-data", async (req, res) => {
       programtype: sub.ProgramType?.programtype || null
     }));
 
-    // Load all other models
+    const dataMap = {};
+
     await Promise.all(
       Object.entries(tableModelMap).map(async ([tableName, model]) => {
         if (tableName === "Program Subtypes") {
@@ -561,19 +556,23 @@ app.get("/api/all-data", async (req, res) => {
       })
     );
 
-    // Build final response
-    const response = {
-      tableRefs: tableRefs.map(ref => ({
-        ...ref,
-        data: dataMap[ref.table_name] || []
-      }))
-    };
+    const responseData = tableRefs.map(ref => ({
+      table_id: ref.table_id,
+      table_name: ref.table_name,
+      tableData: dataMap[ref.table_name] || []
+    }));
 
-    res.json(response);
+    res.json({
+      status: 200,
+      data: responseData
+    });
 
   } catch (err) {
     console.error("Error in /api/all-data:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      status: 500,
+      error: err.message
+    });
   }
 });
 
