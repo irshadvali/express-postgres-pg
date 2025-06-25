@@ -16,6 +16,9 @@ import {TableRef} from "./models/tableRef.js"
 import { ProgramType } from "./models/programType.js";
 import { ProgramSubtype } from "./models/programSubtype.js";
 import { ProgramTimezone } from "./models/programTimezone.js"
+import swaggerUi from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
+import { swaggerOptions } from "./swaggerOptions.js";
 const app = express();
 app.use(express.json());
 
@@ -31,6 +34,8 @@ if (process.env.NODE_ENV !== "test") {
     })
     .catch(err => console.error("Database connection failed:", err));
 }
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // TableRef ROUTES
 app.get("/api/table_ref", async (req, res) => {
   const tableref = await TableRef.findAll();
@@ -92,6 +97,15 @@ app.get("/api/clients/:id", async (req, res) => {
 });
 
 // PROGRAM ATTRIBUTE ROUTES
+/**
+ * @swagger
+ * /api/program-attributes:
+ *   get:
+ *     summary: Get all program attributes
+ *     responses:
+ *       200:
+ *         description: List of program attributes
+ */
 app.get("/api/program-attributes", async (req, res) => {
   const items = await ProgramAttribute.findAll();
   res.json(items);
