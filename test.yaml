@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - logicalFilePath: file/reference/create_table.yaml
+
+  - changeSet:
+      id: create-table
+      author: Irshad Vali
+      changes:
+        - createTable:
+            tableName: table_reference
+            schemaName: reference
+            columns:
+              - column:
+                  name: id
+                  type: varchar(10)  # changed from UUID to match "RT1", "RT2", etc.
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: label
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: table_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: insert-table-data-sql
+      author: Irshad Vali
+      changes:
+        - sql: |
+            INSERT INTO reference.table_reference (id, label, table_name) VALUES
+            ('RT1', 'Program Attributes', 'program_attribute'),
+            ('RT2', 'Program Channel', 'program_channel'),
+            ('RT3', 'Program Language', 'program_language'),
+            ('RT4', 'Program Measure', 'program_measure'),
+            ('RT5', 'Program Schedule Type', 'program_schedule_type'),
+            ('RT6', 'Program Status', 'program_status'),
+            ('RT7', 'Program Timeframe', 'program_timeframe'),
+            ('RT8', 'Program Timezone', 'program_timezone'),
+            ('RT9', 'Program Type', 'program_type'),
+            ('RT10', 'Program Week', 'program_week');

@@ -149,6 +149,7 @@ app.delete("/api/program-attributes/:id", async (req, res) => {
 });
 
 // PROGRAM SCHEDULE TYPE ROUTES
+
 app.get("/api/program-schedule-types", async (req, res) => {
   const items = await ProgramScheduleType.findAll();
   res.json(items);
@@ -161,6 +162,15 @@ app.get("/api/program-schedule-types/:id", async (req, res) => {
 });
 
 // PROGRAM LANGUAGE ROUTES
+/**
+ * @swagger
+ * /api/program-languages:
+ *   get:
+ *     summary: Get all program languages
+ *     responses:
+ *       200:
+ *         description: List of program languages
+ */
 app.get("/api/program-languages", async (req, res) => {
   const items = await ProgramLanguage.findAll();
   res.json(items);
